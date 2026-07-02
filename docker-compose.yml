@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  xksh808-mcp:
+    build: .
+    container_name: xksh808-ultimate
+    restart: unless-stopped          # auto-restarts on crash or reboot
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./outputs:/app/outputs       # persisted generated files
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s

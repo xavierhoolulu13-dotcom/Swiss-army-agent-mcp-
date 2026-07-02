@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "xksh808-ultimate-mcp"
+version = "1.0.0"
+description = "XKSH808 Ultimate Concierge — Unified HF Space MCP Tool"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp>=1.0.0",
+    "gradio-client>=0.9.0",
+    "httpx>=0.27.0",
+    "python-dotenv>=1.0.0",
+    "stripe>=9.0.0",
+    "fastapi>=0.111.0",
+    "uvicorn>=0.29.0",
+    "pydantic>=2.7.0",
+    "pillow>=10.3.0",
+    "requests>=2.31.0",
+]
+
+[project.scripts]
+xksh808-mcp = "mcp_server.server:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["mcp_server*", "webhooks*"]
