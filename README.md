@@ -5,6 +5,34 @@
 
 ---
 
+## ⚡ No-Click Install
+
+### Mac / Linux — one command, auto-starts forever
+```bash
+curl -fsSL https://raw.githubusercontent.com/xavierhoolulu13-dotcom/Swiss-army-agent-mcp-/main/install.sh | bash
+```
+
+### Windows — one command (PowerShell, no admin)
+```powershell
+irm https://raw.githubusercontent.com/xavierhoolulu13-dotcom/Swiss-army-agent-mcp-/main/install.ps1 | iex
+```
+
+### Docker — one command, runs as a service
+```bash
+curl -fsSL https://raw.githubusercontent.com/xavierhoolulu13-dotcom/Swiss-army-agent-mcp-/main/docker-compose.yml -o docker-compose.yml && docker compose up -d
+```
+
+The installer:
+1. Clones the repo to `~/.xksh808/mcp`
+2. Creates a virtualenv and installs all dependencies
+3. **Auto-patches Claude Desktop** `claude_desktop_config.json` — no manual editing
+4. **Registers a system service** (launchd on Mac, systemd on Linux, Scheduled Task on Windows) so the server starts on every login
+5. Restarts Claude Desktop detection is automatic — just relaunch Claude
+
+After install, only one thing to fill in: `~/.xksh808/mcp/.env` → add `HF_TOKEN` and `OWNER_TOKEN`.
+
+---
+
 ## What This Is
 
 A **Model Context Protocol (MCP) server** that wires together four Hugging Face Spaces into a single branded, tier-gated tool engine — deployable as a local MCP server, an HTTP API, or a Hugging Face Gradio Space.
