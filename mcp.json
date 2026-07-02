@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "xksh808-ultimate": {
+      "command": "python",
+      "args": ["-m", "mcp_server.server"],
+      "cwd": ".",
+      "env": {
+        "HF_TOKEN": "${HF_TOKEN}",
+        "OWNER_TOKEN": "${OWNER_TOKEN}",
+        "MAKE_WEBHOOK_URL": "${MAKE_WEBHOOK_URL}"
+      }
+    }
+  }
+}
