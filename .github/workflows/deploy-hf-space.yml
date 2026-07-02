@@ -1,0 +1,68 @@
+name: 🌋 Deploy to Hugging Face Space
+
+on:
+  push:
+    branches: [main, feature/xksh808-ultimate]
+    paths:
+      - "gradio_app/**"
+      - ".github/workflows/deploy-hf-space.yml"
+  workflow_dispatch:   # lets you trigger manually from GitHub mobile app
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_USERNAME: ${{ secrets.HF_USERNAME }}   # your HF username, e.g. xksh808
+          SPACE_NAME: XKSH808-Ultimate-Concierge
+        run: |
+          # Install HF CLI
+          pip install -q huggingface_hub
+
+          # Configure git for HF
+          git config --global user.email "xksh808dsh@gmail.com"
+          git config --global user.name "operatorX"
+
+          python - <<'PYEOF'
+          import os
+          from huggingface_hub import HfApi, create_repo, upload_folder
+
+          token    = os.environ["HF_TOKEN"]
+          username = os.environ["HF_USERNAME"]
+          space    = os.environ["SPACE_NAME"]
+          repo_id  = f"{username}/{space}"
+
+          api = HfApi(token=token)
+
+          # Create Space if it doesn't exist yet
+          try:
+              create_repo(
+                  repo_id=repo_id,
+                  repo_type="space",
+                  space_sdk="gradio",
+                  private=False,
+                  token=token,
+                  exist_ok=True,
+              )
+              print(f"Space ready: https://huggingface.co/spaces/{repo_id}")
+          except Exception as e:
+              print(f"Space already exists or creation note: {e}")
+
+          # Upload the gradio_app folder as the Space root
+          upload_folder(
+              folder_path="gradio_app",
+              repo_id=repo_id,
+              repo_type="space",
+              token=token,
+              commit_message="🌋 Auto-deploy from GitHub — XKSH808 Ultimate Concierge",
+              ignore_patterns=["__pycache__", "*.pyc", ".env"],
+          )
+          print(f"✅ Deployed → https://huggingface.co/spaces/{repo_id}")
+          PYEOF
